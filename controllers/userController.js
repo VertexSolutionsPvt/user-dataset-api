@@ -66,6 +66,14 @@ const editUser = async (req, res, next) => {
 
     const currentUser = currentUserRows[0];
     
+    // 2.1. Validate company existence if company_id is provided in the payload
+    if (Object.prototype.hasOwnProperty.call(updates, 'company_id') && updates.company_id !== null) {
+      const [companyRows] = await pool.execute('SELECT id FROM companies WHERE id = ?', [updates.company_id]);
+      if (companyRows.length === 0) {
+        return res.status(404).json({ success: false, error: 'Provided company does not exist' });
+      }
+    }
+
     // Allowed fields to modify on the primary `users` table
     const allowedFields = ['name', 'email', 'role', 'company_id'];
     const fieldsToUpdate = [];
