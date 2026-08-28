@@ -38,4 +38,31 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { login };
+const register = async (req, res, next) => {
+  try {
+    const { name, email, role = 'user' } = req.body;
+
+    if (!name || !email) {
+      return res.status(400).json({ success: false, error: 'Name and email are required' });
+    }
+
+    const [existing] = await pool.execute('SELECT id FROM users WHERE email = ?', [email]);
+    if (existing.length > 0) {
+      return res.status(409).json({ success: false, error: 'User with this email already exists' });
+    }
+
+    const [result] = await pool.execute(
+      'INSERT INTO users (name, email, role) VALUES (?, ?, ?)',
+      [name, email, role]
+    );
+
+    res.status(201).json({
+      success: true,
+      data: { id: result.insertId, name, email, role }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { login, register };
