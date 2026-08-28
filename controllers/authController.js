@@ -40,25 +40,39 @@ const login = async (req, res, next) => {
 
 const register = async (req, res, next) => {
   try {
-    const { name, email, role = 'user' } = req.body;
+    const { name, email, password, role = 'user', company_id = null } = req.body;
 
-    if (!name || !email) {
-      return res.status(400).json({ success: false, error: 'Name and email are required' });
+    // 1. Validate required fields including password
+    if (!name || !email || !password) {
+      return res.status(400).json({ success: false, error: 'Name, email, and password are required' });
     }
 
+    // 2. Check if user already exists
     const [existing] = await pool.execute('SELECT id FROM users WHERE email = ?', [email]);
     if (existing.length > 0) {
       return res.status(409).json({ success: false, error: 'User with this email already exists' });
     }
 
+    // 3. Hash the password securely
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // 4. Insert new user into database
     const [result] = await pool.execute(
-      'INSERT INTO users (name, email, role) VALUES (?, ?, ?)',
-      [name, email, role]
+      'INSERT INTO users (name, email, password, role, company_id) VALUES (?, ?, ?, ?, ?)',
+      [name, email, hashedPassword, role, company_id]
     );
 
+    // 5. Respond with created user data (excluding password)
     res.status(201).json({
       success: true,
-      data: { id: result.insertId, name, email, role }
+      data: { 
+        id: result.insertId, 
+        name, 
+        email, 
+        role, 
+        company_id 
+      }
     });
   } catch (error) {
     next(error);
