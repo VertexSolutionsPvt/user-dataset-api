@@ -54,7 +54,7 @@ Default Password = `Password123!` (for User 1 and 2)
 * **Access:** Private (Role updating requires Admin role)
 * **Headers:**
   * `Authorization: Bearer <jwt_token>`
-  *  `Content-Type: application/json`
+  * `Content-Type: application/json`
 
 * **Request Body (Comprehensive Example):**
 ```json
