@@ -1,6 +1,6 @@
 {
   "name": "user-dataset-api",
-  "version": "2.0.0",
+  "version": "0.1.0",
   "description": "User & Data Management API System - Vertex Solutions Pvt. Ltd.",
   "main": "server.js",
   "scripts": {

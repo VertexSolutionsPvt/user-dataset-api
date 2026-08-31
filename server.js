@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const companyRoutes = require('./routes/companyRoutes');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -20,7 +21,7 @@ app.get('/', (req, res) => {
 // API Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
-
+app.use('/api/v1/companies', companyRoutes);
 // Centralized Error Handling Middleware
 app.use(errorHandler);
 

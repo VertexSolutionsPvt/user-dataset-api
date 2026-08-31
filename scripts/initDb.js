@@ -92,9 +92,12 @@ const initDatabase = async () => {
     // Seed Company
     const [compResult] = await connection.query(`
       INSERT INTO companies (name, address) 
-      VALUES ('Vertex Solutions Pvt. Ltd.', 'Boudha, Kathmandu, Nepal');
+      VALUES ('Vertex Solutions Pvt. Ltd.', 'Boudha, Kathmandu, Nepal'),
+             ('Vertex Solutions eClassroom', 'Baneshowr, Kathmandu, Nepal'),
+             ('Vertex Solutions Robotics', 'New Road, Kathmandu, Nepal'),
+      ;
     `);
-    const companyId = compResult.insertId;
+    const companyId = 1;
 
     // Hash Password
     const hashedPassword = await bcrypt.hash('Password123!', 10);

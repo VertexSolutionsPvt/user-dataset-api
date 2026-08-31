@@ -40,7 +40,7 @@ const login = async (req, res, next) => {
 
 const register = async (req, res, next) => {
   try {
-    const { name, email, password, role = 'user', company_id = null } = req.body;
+    const { name, email, password, company_id = null } = req.body;
 
     // 1. Validate required fields including password
     if (!name || !email || !password) {
@@ -57,13 +57,16 @@ const register = async (req, res, next) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // 4. Insert new user into database
+    // 4. Force role to 'user' to prevent privilege escalation on public registration
+    const role = 'user';
+
+    // 5. Insert new user into database
     const [result] = await pool.execute(
       'INSERT INTO users (name, email, password, role, company_id) VALUES (?, ?, ?, ?, ?)',
       [name, email, hashedPassword, role, company_id]
     );
 
-    // 5. Respond with created user data (excluding password)
+    // 6. Respond with created user data
     res.status(201).json({
       success: true,
       data: { 
