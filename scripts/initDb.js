@@ -94,7 +94,7 @@ const initDatabase = async () => {
       INSERT INTO companies (name, address) 
       VALUES ('Vertex Solutions Pvt. Ltd.', 'Boudha, Kathmandu, Nepal'),
              ('Vertex Solutions eClassroom', 'Baneshowr, Kathmandu, Nepal'),
-             ('Vertex Solutions Robotics', 'New Road, Kathmandu, Nepal'),
+             ('Vertex Solutions Robotics', 'New Road, Kathmandu, Nepal')
       ;
     `);
     const companyId = 1;
